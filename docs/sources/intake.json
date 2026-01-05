@@ -1,0 +1,227 @@
+{
+  "project": {
+    "name": "Family Financial Management",
+    "creator": "INNOVAI SWAIF",
+    "version": "0.1.0",
+    "github_repository_url": null,
+    "dates": {
+      "created_at": "2026-01-04",
+      "first_release_at": null,
+      "mvp_release_at": null,
+      "scalar_release_at": null
+    },
+    "timezone": "America/Sao_Paulo",
+    "one_liner": "A family finance system that tracks per-member income/expense transactions, supports member vs family views, and manages inter-member debts from shared expenses with partial payments.",
+    "tech_constraints": {
+      "database": "PostgreSQL",
+      "frontend": "Node.js",
+      "backend": "Python",
+      "deployment": [
+        "Docker"
+      ]
+    },
+    "compliance_security_baseline": {
+      "lgpd": true,
+      "encryption_at_rest": true,
+      "backups": true,
+      "data_export": true,
+      "data_deletion": true,
+      "authentication": {
+        "method": "password_only",
+        "mfa_required": false
+      }
+    }
+  },
+  "domain": {
+    "entities": {
+      "family": {
+        "id": "family_id"
+      },
+      "user": {
+        "id": "user_id"
+      },
+      "member": {
+        "id": "member_id"
+      },
+      "bank_account": {
+        "id": "bank_account_id"
+      },
+      "transaction": {
+        "id": "transaction_id"
+      },
+      "category": {
+        "id": "category_id"
+      },
+      "debt": {
+        "id": "debt_id"
+      },
+      "debt_payment": {
+        "id": "debt_payment_id"
+      },
+      "import_batch": {
+        "id": "import_batch_id"
+      },
+      "import_template": {
+        "id": "import_template_id"
+      }
+    }
+  },
+  "roles_and_permissions": {
+    "roles": [
+      {
+        "name": "patriarch",
+        "type": "admin",
+        "capabilities": [
+          "add_members",
+          "manage_categories",
+          "view_all_transactions",
+          "view_all_debts",
+          "manage_family_configuration"
+        ]
+      },
+      {
+        "name": "member",
+        "type": "user",
+        "capabilities": [
+          "view_transactions_member_mode",
+          "view_transactions_family_mode",
+          "view_debts_member_mode",
+          "view_debts_family_mode",
+          "import_csv",
+          "audit_imported_transactions"
+        ],
+        "restrictions": [
+          "cannot_manage_categories",
+          "cannot_add_members"
+        ]
+      }
+    ],
+    "view_modes": {
+      "member_mode": {
+        "transactions_visibility": "only_selected_member_transactions",
+        "debts_visibility": "only_debts_relevant_to_selected_member"
+      },
+      "family_mode": {
+        "transactions_visibility": "all_members_transactions",
+        "debts_visibility": "all_members_debts"
+      }
+    }
+  },
+  "requirements": {
+    "must_have_v1": [
+      "Admin-only member onboarding via UI form (name, CPF, birth date, bank account(s))",
+      "Per-member transaction tracking (income and expenses), each transaction belongs to exactly one member",
+      "Member can have multiple bank accounts",
+      "Switchable views: Member-mode and Family-mode with RBAC rules",
+      "Budget categories defined by Patriarch; immutable for members",
+      "CSV import with column validation and de-para mapping into canonical schema",
+      "Save reusable 'bank templates' derived from mappings for future imports",
+      "Import audit workflow: review, edit/delete transactions, validate personal data, assign category, then commit",
+      "Debt management via manual split-cost creation with customizable proportions",
+      "Debts support partial payments and settlement tracking",
+      "Security baseline: encryption at rest, backups, data export, data deletion"
+    ],
+    "out_of_scope_v1": [
+      "Direct bank API/Open Finance integrations (CSV only)",
+      "Investment portfolio tracking",
+      "Tax filing features",
+      "Advanced forecasting/AI budgeting automation"
+    ],
+    "user_journeys": [
+      {
+        "name": "Admin setup",
+        "steps": [
+          "Patriarch creates the family",
+          "Patriarch defines categories",
+          "Patriarch adds members (name, CPF, birth date, bank account(s))"
+        ]
+      },
+      {
+        "name": "CSV import and audit",
+        "steps": [
+          "Member uploads bank CSV",
+          "System validates required columns",
+          "User maps columns to canonical schema (de-para) or selects a saved bank template",
+          "System imports into a staging area (import batch)",
+          "User audits: edit/delete transactions, validate personal data, assign categories",
+          "User commits the import to finalize transactions"
+        ]
+      },
+      {
+        "name": "Split expense and settle debt",
+        "steps": [
+          "User records a shared expense paid by one member",
+          "User sets custom split proportions",
+          "System creates debts between members",
+          "Owing members record partial payments",
+          "Debt is marked settled when fully paid"
+        ]
+      }
+    ],
+    "csv_import": {
+      "primary_sources": [
+        "bank_exports"
+      ],
+      "validation": [
+        "column_presence",
+        "column_types",
+        "required_fields"
+      ],
+      "mapping": {
+        "supports_de_para": true,
+        "template_learning": true,
+        "template_scope": "per_bank_or_source"
+      },
+      "canonical_fields_minimum": [
+        "date",
+        "amount",
+        "description",
+        "direction",
+        "member",
+        "bank_account"
+      ]
+    },
+    "audit": {
+      "required": true,
+      "actions": [
+        "edit_transaction",
+        "delete_transaction",
+        "assign_category",
+        "validate_personal_data"
+      ],
+      "applies_to": [
+        "imported_transactions"
+      ]
+    },
+    "debts": {
+      "creation": "manual_split_per_debt",
+      "split": {
+        "custom_proportions": true,
+        "supported_methods": [
+          "percentage"
+        ]
+      },
+      "payments": {
+        "partial_payments_allowed": true,
+        "tracks_history": true
+      },
+      "lifecycle": [
+        "open",
+        "partially_paid",
+        "settled"
+      ]
+    },
+    "acceptance_criteria": [
+      "RBAC is enforced: in Member-mode, a member sees only the selected member’s transactions; in Family-mode, members see all family transactions.",
+      "Debt visibility follows view mode: in Family-mode, members can view all members’ debts; in Member-mode, only debts relevant to the selected member are visible.",
+      "Patriarch can add members with required fields; members cannot add members.",
+      "Categories can be created/managed by Patriarch; members cannot edit categories.",
+      "CSV import enforces schema validation, supports de-para mapping, and saves reusable templates; invalid schemas are rejected.",
+      "Audit step allows edit/delete and category assignment before transactions are finalized.",
+      "Manual split-cost creates correct debts; partial payments reduce outstanding balance; debts can be settled.",
+      "Encryption at rest and backups are enabled; authorized data export and deletion flows exist."
+    ]
+  },
+  "open_questions": [],
+  "project_creator": "INNOVAI SWAIF"
+}
