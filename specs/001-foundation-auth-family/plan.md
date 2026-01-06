@@ -144,14 +144,6 @@ Recommended checks:
 - **Sensitive data exposure risk:** CPF/birth date should be minimized in API payloads; ensure only required screens/roles can view.
 - **Member-mode self-only constraint:** simplifies privacy but reduces flexibility; must be enforced server-side to prevent “selected member” tampering.
 
-## Validation approach (maps to spec acceptance criteria)
-- Auth gate: verify unauthenticated access is rejected.
-- CPF login: verify CPF + password works for seeded Patriarch and created Members.
-- Admin-only onboarding: verify Members cannot create/modify/remove Members.
-- Member-mode self-only: verify non-admin cannot select/see other Members in Member-mode.
-- CPF format: verify only the two accepted formats pass.
-- Bank accounts required fields: verify create Member fails if missing any required bank account field.
-
 ## Sources
 - [docs/sources/conversation-summary.md](docs/sources/conversation-summary.md)
 - [docs/sources/intake.json](docs/sources/intake.json)

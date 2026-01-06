@@ -16,8 +16,8 @@
 - [ ] Auth: add CPF input validation (format-only) at auth boundary (AC6)
 
 - [ ] RBAC: implement centralized policy for role × mode × resource decisions (AC9, AC10, AC11)
-- [ ] RBAC: enforce Family-mode visibility filtering on relevant endpoints (AC9, AC11)
-- [ ] RBAC: enforce Member-mode filtering on relevant endpoints (AC10, AC11)
+- [ ] RBAC: enforce Family-mode visibility filtering on endpoints implemented in 001 (AC9, AC11)
+- [ ] RBAC: enforce Member-mode filtering on endpoints implemented in 001 (AC10, AC11)
 - [ ] RBAC: enforce Member-mode self-only for non-admins (AC8, AC11)
 
 - [ ] Members API: Admin-only create Member (name, CPF, birth date, >=1 bank account) (AC4, AC5, AC7)
@@ -36,7 +36,7 @@
 - [ ] Tests: CPF format acceptance/rejection (AC6)
 - [ ] Tests: Admin-only member creation (AC4, AC7)
 - [ ] Tests: member creation required fields + >=1 bank account (AC5)
-- [ ] Tests: RBAC visibility matrix for Family-mode vs Member-mode (AC9, AC10, AC11)
+- [ ] Tests: RBAC visibility matrix for Family-mode vs Member-mode (policy-level, resource kinds include transactions/debts) (AC9, AC10, AC11)
 - [ ] Tests: Member-mode self-only constraint (AC8, AC11)
 
 - [ ] Manual validation: run the happy-path journeys J1–J3 from the spec (AC1–AC11)

@@ -11,13 +11,15 @@ This feature defines *what* must exist and *how it must behave*; it does not pre
 - Only the Patriarch can onboard new Members.
 - Access to transactions and debts is consistently restricted by **role** and **view mode**.
 
-## Non-goals (v1)
+## Non-goals (this feature)
 - MFA / 2FA.
 - Multi-family membership per user.
-- Category management, CSV import, audit workflow, debt creation/payment flows, and LGPD lifecycle/security mechanisms (handled in later features).
+- Category management, CSV import, audit workflow, debt creation/payment flows, and LGPD lifecycle/security mechanisms.
+
+Note: Some of the above are still required for the overall product v1 per sources, but are intentionally specified in other feature specs.
 
 ## Scope
-### In scope (v1)
+### In scope (this feature)
 - Authentication with **password-only** (no MFA requirement).
 - A single family context with:
   - Exactly one **Patriarch (Admin)**.
@@ -31,7 +33,7 @@ This feature defines *what* must exist and *how it must behave*; it does not pre
   - Transactions
   - Debts
 
-### Out of scope (v1)
+### Out of scope (this feature)
 - Multi-family membership per user (a user belongs to only one family).
 - MFA / 2FA.
 - Category management, CSV import, audit, debts lifecycle logic, security/LGPD lifecycle implementation (defined in later features), except where explicitly referenced as cross-feature constraints.
