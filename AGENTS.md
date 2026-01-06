@@ -32,20 +32,20 @@
 ## Project commands (fill these in for your repo)
 ### Backend
 - Install:
-  - `<ADD COMMAND>`
+  - `cd backend && python -m pip install -r requirements.txt`
 - Lint:
-  - `<ADD COMMAND>`
+  - `cd backend && python -m ruff check . && python -m ruff format --check .`
 - Tests:
-  - `<ADD COMMAND>`
+  - `cd backend && pytest -q`
 - Run:
-  - `<ADD COMMAND>`
+  - `cd backend && uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload`
 
 ### Frontend
 - Install:
-  - `<ADD COMMAND>`
+  - `cd frontend && npm ci`
 - Lint:
-  - `<ADD COMMAND>`
+  - `cd frontend && npm run lint`
 - Tests:
-  - `<ADD COMMAND>`
+  - `cd frontend && npm test`
 - Run:
-  - `<ADD COMMAND>`
+  - `cd frontend && npm run dev`
